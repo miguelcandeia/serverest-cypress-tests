@@ -1,0 +1,14 @@
+{
+  "name": "serverest-cypress",
+  "version": "1.0.0",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:api": "cypress run --spec 'cypress/e2e/api/**'",
+    "cy:front": "cypress run --spec 'cypress/e2e/front/**'"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "cypress": "^13.15.0"
+  }
+}
