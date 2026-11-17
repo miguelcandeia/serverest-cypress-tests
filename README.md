@@ -13,10 +13,13 @@ Testes E2E (frontend) e de API para o [ServeRest](https://serverest.dev), desenv
 ```bash
 npm install
 npm run cy:open    # modo interativo
-npm run cy:run     # todos os testes (headless)
+npm run cy:run     # todos os testes (headless) e geração do relatório
 npm run cy:api     # somente API
 npm run cy:front   # somente frontend
 ```
+
+## Relatório
+Ao rodar os testes em modo headless, é gerado um relatório HTML em `cypress/reports/index.html`, com gráficos, resultado por teste e screenshots das falhas. No GitHub Actions, o relatório fica disponível como artefato (`cypress-report`) da execução.
 
 ## Cenários
 **Frontend (4)**
@@ -43,6 +46,7 @@ cypress/
     commands.js   comandos customizados (criar usuário/produto, login via API)
     messages.js   mensagens esperadas centralizadas
     schemas.js    schemas e helper de validação de contrato
+    e2e.js        arquivo de suporte carregado antes dos testes
 .github/workflows/cypress.yml   execução automática no GitHub Actions
 ```
 
@@ -51,13 +55,11 @@ cypress/
 - **Factory de dados:** cada execução usa dados únicos (faker), então os testes são independentes entre si e não dependem de dados pré-existentes.
 - **Comandos customizados:** pré-condições (criar usuário, obter token, criar produto) são feitas pela API, o que deixa os testes de interface mais rápidos e focados no que realmente testam.
 - **Mensagens centralizadas:** textos esperados ficam em um único arquivo (`messages.js`).
-- **Validação de contrato:** a API é validada por schema (campos e tipos), além de status e mensagem.
+- **Validação de contrato:** a API é validada por schema (campos e tipos), além de status e mensagem, e os dados criados são conferidos com um `GET` posterior.
 - **Sem esperas fixas:** sincronização por asserções (por exemplo, URL), sem `cy.wait()` com tempo fixo.
-
-## Observações
-- O cadastro de produto pela interface retornou erro 400 da API mesmo com todos os campos preenchidos e imagem anexada (também ao testar manualmente). Por isso a cobertura de produtos foi feita pela API.
+- **Relatório HTML:** `cypress-mochawesome-reporter` para facilitar a leitura dos resultados, inclusive no CI.
 
 ## Melhorias futuras
-- Relatório HTML dos testes (mochawesome)
+- Cenários de frontend em BDD com Cucumber (Gherkin)
 - ESLint e Prettier
 - Cenários de PUT e DELETE de usuário e produto, listagem e produto sem token
